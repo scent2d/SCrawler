@@ -1,6 +1,6 @@
-// go run main.go [target]
-// go run main.go https://youtube.com
-// go run main.go https://youtube.com > output.txt
+// USAGE	: go run main.go [target]
+// EXAMPLE	: go run main.go https://youtube.com
+
 
 package main
 
