@@ -1,4 +1,4 @@
-// USAGE	: go run main.go [target]
+// USAGE		: go run main.go [target]
 // EXAMPLE	: go run main.go https://youtube.com
 
 
