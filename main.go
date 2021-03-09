@@ -1,11 +1,10 @@
 // USAGE	: go run main.go [target]
 // EXAMPLE	: go run main.go https://youtube.com
 
-
 package main
 
 import (
-	_ "bufio"
+	"bufio"
 	"crypto/tls"
 	"fmt"
 	"net/http"
@@ -33,16 +32,6 @@ var (
 func crawlURL(href string) {
 	hasVisited[href] = true
 	fmt.Printf("Crawling URL --> %v \n", href)
-
-	// 결과 파일로 쓰기
-	// file, err := os.OpenFile("/Users/scent2d/golang/src/SCrawler2/output.txt", os.O_CREATE|os.O_RDWR, os.FileMode(0777))
-	// checkError(err)
-
-	// defer file.Close()
-
-	// w := bufio.NewWriter(file)
-	// w.WriteString(href + "\r\n")
-	// w.Flush()
 
 	response, err := netClient.Get(href)
 	checkError(err)
@@ -109,6 +98,12 @@ func main() {
 		os.Exit(1)
 	}
 
+	file, err := os.OpenFile("/Users/scent2d/golang/src/SCrawler2/output.txt", os.O_CREATE|os.O_RDWR, os.FileMode(0777))
+	checkError(err)
+	defer file.Close()
+
+	w := bufio.NewWriter(file)
+
 	baseURL := arguments[0]
 
 	go func() {
@@ -118,6 +113,8 @@ func main() {
 	for href := range queue {
 		if !hasVisited[href] && isSameDomain(href, baseURL) {
 			crawlURL(href)
+			w.WriteString(href + "\r\n")
 		}
+		w.Flush()
 	}
 }
