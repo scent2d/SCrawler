@@ -1,11 +1,11 @@
-// USAGE	: go run main.go [target]
-// EXAMPLE	: go run main.go https://youtube.com
+// EXAMPLE	: go run main.go -host=https://www.youtube.com -file=/home/scent2d/output.txt
 
 package main
 
 import (
 	"bufio"
 	"crypto/tls"
+	"flag"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -98,20 +98,25 @@ func main() {
 		os.Exit(1)
 	}
 
-	file, err := os.OpenFile("/Users/scent2d/golang/src/SCrawler/output.txt", os.O_CREATE|os.O_RDWR, os.FileMode(0777))
+	// 아규먼츠 변수에 할당
+	baseURL := flag.String("host", "http://localhost", "Input host, ex) https://www.youtube.com")
+	fileName := flag.String("file", "~/output.txt", "Output")
+
+	flag.Parse()
+	file, err := os.OpenFile(*fileName, os.O_CREATE|os.O_RDWR, os.FileMode(0777))
 	checkError(err)
 	defer file.Close()
 
 	w := bufio.NewWriter(file)
 
-	baseURL := arguments[0]
+	// baseURL := arguments[0]
 
 	go func() {
-		queue <- baseURL
+		queue <- *baseURL
 	}()
 
 	for href := range queue {
-		if !hasVisited[href] && isSameDomain(href, baseURL) {
+		if !hasVisited[href] && isSameDomain(href, *baseURL) {
 			crawlURL(href)
 			w.WriteString(href + "\r\n")
 		}
