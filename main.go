@@ -98,7 +98,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	file, err := os.OpenFile("/Users/scent2d/golang/src/SCrawler2/output.txt", os.O_CREATE|os.O_RDWR, os.FileMode(0777))
+	file, err := os.OpenFile("/Users/scent2d/golang/src/SCrawler/output.txt", os.O_CREATE|os.O_RDWR, os.FileMode(0777))
 	checkError(err)
 	defer file.Close()
 
